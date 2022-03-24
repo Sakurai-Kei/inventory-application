@@ -3,15 +3,19 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "devstart": "nodemon ./bin/www",
+    "svrstart": "DEBUG=inventory-application:* npm run devstart"
   },
   "dependencies": {
+    "async": "^3.2.3",
     "cookie-parser": "~1.4.6",
     "debug": "~4.3.4",
     "express": "~4.17.3",
     "http-errors": "~2.0.0",
-    "jade": "~1.11.0",
+    "mongoose": "^6.2.8",
     "morgan": "~1.10.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "pug": "^3.0.2"
   }
 }
