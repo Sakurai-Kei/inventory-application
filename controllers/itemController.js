@@ -1,9 +1,25 @@
-var itemModel = require('../models/itemModel');
+var async = require('async');
+var Item = require('../models/itemModel');
+
 
 exports.itemList = function(req, res) {
-    res.send('NOT IMPLEMENTED: ITEM LIST');
+    async.parallel({
+        itemList: function(callback) {
+            Item.find().exec(callback)
+        }
+    }, function(err, results) {
+        if(err) { return next(err) }
+        res.render('items', { title: 'Item List', itemList: results.itemList })
+    })
 }
 
 exports.itemDetail = function(req, res) {
-    res.send('NOT IMPLEMENTED: ITEM DETAIL');
+    async.parallel({
+        item: function(callback) {
+            Item.findById(req.params.id).populate('category').exec(callback)
+        }
+    }, function (err, results) {
+        if(err) { return next(err) }
+        res.render('itemDetail', { item: results.item })
+    })
 };

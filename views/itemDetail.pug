@@ -1,0 +1,13 @@
+extends layout 
+
+block content 
+  h1= item.name
+  div Category:
+  ul 
+    each category in item.category 
+      li 
+        a(href=category.url) #{category.name}
+
+  div #{item.summary}
+  div Price: #{item.price}
+  div Quantity: #{item.stock}

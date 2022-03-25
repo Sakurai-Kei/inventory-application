@@ -1,0 +1,14 @@
+extends layout 
+
+block content 
+
+  h1= category.name 
+  div #{category.summary}
+
+  ul 
+    each item in items
+      li 
+        a(href=item.url) #{item.name}
+
+    else 
+      li There are no items in this category
