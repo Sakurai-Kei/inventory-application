@@ -62,6 +62,7 @@ exports.itemCreatePost = [
     },
     body('name', 'Name must not be empty').trim().isLength({ min: 1 }).escape(),
     body('summary', 'Summary must not be empty').trim().isLength({ min: 1 }).escape(),
+    body('category', 'At least one category must be chosen').not().isEmpty(),
     body('category.*').escape(),
     body('price', 'Price must not be empty').trim().isLength({ min: 1}).escape(),
     body('price').custom( function(value, { req }) {
@@ -110,7 +111,7 @@ exports.itemCreatePost = [
                     }
                     return 0;
                 })        
-                res.render('itemForm', { title: 'Create Item', categoryList: sortedCategoryList, errors: errors.array() })
+                res.render('itemForm', { title: 'Create Item', item: item, categoryList: sortedCategoryList, errors: errors.array() })
             })
             return;
         }
