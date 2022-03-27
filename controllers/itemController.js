@@ -49,7 +49,7 @@ exports.itemCreateGet = function(req, res) {
 }
 
 exports.itemCreatePost = [
-    function (req, res, next) {
+    function(req, res, next) {
         if(!(req.body.category instanceof Array)) {
             if(typeof req.body.category === 'undefined') {
                 req.body.category = [];

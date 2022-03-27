@@ -1,14 +1,15 @@
 extends layout 
 
 block content 
-  h1= title 
+  h1= title
+  - if(item === undefined) { item = { name: '', summary: '', price: '', stock: '' } };
 
   form(method='POST' action='')
     div.form-group
-      label(for='name') Name: 
+      label(for='name') Item Name: 
       input#name.form-control(type='text', placeholder='Name of item', name='name', value=item.name , required='true')
     div.form-group
-      label(for='summary') Summary:
+      label(for='summary') Item Summary:
       input#summary.form-control(type='text', placeholder='Item description', name='summary', value=item.summary, required='true')
     div.form-group
       label Category:
