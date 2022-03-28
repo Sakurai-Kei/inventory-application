@@ -43,15 +43,32 @@ exports.createCategoryPost = [
             summary: req.body.summary
         })
         if(!errors.isEmpty()) {
-            res.render('categoryForm', { title: 'Create Category', category: categoryList })
+            res.render('categoryForm', { title: 'Create Category', category: category, errors: errors.array()})
         }
         else {
-            // NOT IMPLEMENTED: A check for another category with same name
-            category.save( function(err) {
-                if(err) {return next(err) }
-                res.redirect(category.url)
+            async.parallel({
+                categoryList: function(callback) {
+                    Category.find().exec(callback)
+                }
+            }, function(err, results) {
+                if(err) { return next(err) }
+                let duplicate = undefined;
+                const { categoryList } = results;
+                categoryList.forEach( function(categoryFromList) {
+                    if(categoryFromList.name.toUpperCase() === category.name.toUpperCase()) {
+                        duplicate = true;
+                    }
+                })
+                if(duplicate) {
+                    res.render('categoryForm', { title: 'Create Category', category: category, errors: [{ msg: 'Category already existed' }]})
+                }
+                else {
+                    category.save( function(err) {
+                        if(err) {return next(err) }
+                        res.redirect(category.url)
+                    })                    
+                }
             })
-        }
-        
+        }  
     }
 ]
