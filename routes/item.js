@@ -11,6 +11,10 @@ router.post('/create', itemController.itemCreatePost)
 
 router.get('/:id', itemController.itemDetail);
 
+router.get('/:id/update', itemController.itemUpdateGet);
+
+router.post('/:id/update', itemController.itemUpdatePost);
+
 
 
 module.exports = router;
