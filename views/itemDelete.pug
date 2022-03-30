@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1= title
+  div Are you sure you want to delete this item?
+
+  if item.stock
+    div= 'You still have ' + item.stock + ' left in inventory' 
+
+  form(method='POST' action='')
+    div.form-group
+      input#itemid.form-control(type='hidden', name='itemid', required='true', value=item._id)
+
+    button.btn(type='submit') Delete

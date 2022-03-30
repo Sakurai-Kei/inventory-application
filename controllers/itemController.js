@@ -235,3 +235,22 @@ exports.itemUpdatePost = [
         }
     }
 ];
+
+exports.itemDeleteGet = function(req, res) {
+    async.parallel({
+        item: function(callback) {
+            Item.findById(req.params.id).populate('category').exec(callback)
+        }
+    }, function(err, results) {
+        if(err) { return next(err) }
+        let { item } = results;
+        res.render('itemDelete', { title: 'Delete Item', item: item })
+    })
+};
+
+exports.itemDeletePost = function(req, res) {
+    Item.findByIdAndDelete(req.body.itemid, function deleteItem(err) {
+        if(err) { return next(err) }
+        res.redirect('/item')
+    })
+};

@@ -1,0 +1,22 @@
+extends layout 
+
+block content
+  h1= title
+
+  if item.length
+    div #[strong This category has existing items. Please remove the following items or remove this category from it]
+    div Item List
+
+    ul 
+      for eachItem in item
+        li
+          a(href=eachItem.url) #{eachItem.name}
+
+  else
+    div Do you want to delete this category?
+
+    form(method='POST' action='')
+      div.form-group
+        input#categoryid.form-control(type='hidden', name='categoryid', required='true', value=category._id)
+
+      button.btn(type='submit') Delete

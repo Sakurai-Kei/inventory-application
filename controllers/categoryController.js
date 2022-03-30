@@ -130,3 +130,41 @@ exports.categoryUpdatePost = [
         }
     }
 ];
+
+exports.categoryDeleteGet = function(req, res) {
+    async.parallel({
+        category: function(callback) {
+            Category.findById(req.params.id).exec(callback)
+        },
+        itemFromCategory: function(callback) {
+            Item.find({ 'category': req.params.id }).populate('category').exec(callback)
+        }
+    }, function(err, results) {
+        if(err) { return next(err) }
+        let { category, itemFromCategory } = results;
+        res.render('categoryDelete', { title: 'Delete Category', category: category, item: itemFromCategory })
+    })
+};
+
+exports.categoryDeletePost = function(req, res) {
+    async.parallel({
+        category: function(callback) {
+            Category.findById(req.body.categoryid).exec(callback)
+        },
+        itemFromCategory: function(callback) {
+            Item.find({ 'category': req.body.categoryid }).populate('category').exec(callback)
+        }
+    }, function(err, results) {
+        if(err) { return next(err) }
+        let { category, itemFromCategory } = results;
+        if(!itemFromCategory) {
+            res.render('categoryDelete', { title: 'Delete Category', category: category, item: itemFromCategory })
+        }
+        else {
+            Category.findByIdAndDelete(req.body.categoryid, function deleteCategory(err) {
+                if(err) { return next(err) }
+                res.redirect('/category')
+            })
+        }
+    })
+};
