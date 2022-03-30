@@ -72,3 +72,61 @@ exports.createCategoryPost = [
         }  
     }
 ]
+
+exports.categoryUpdateGet = function(req, res) {
+    async.parallel({
+        category: function(callback) {
+            Category.findById(req.params.id).exec(callback);
+        }
+    }, function(err, results) {
+        if(err) { return next(err) }
+        let { category } = results;
+        res.render('categoryForm', { title: 'Update Category', category: category })
+    })
+};
+
+exports.categoryUpdatePost = [
+    body('name', 'Name must not be empty').trim().isLength({ min:1 }).escape(),
+    body('summary', 'Summary must not be empty').trim().isLength({ min: 1 }).escape(),
+    function(req, res, next) {
+        const errors = validationResult(req);
+
+        var category = new Category({
+            name: req.body.name,
+            summary: req.body.summary,
+            _id: req.params.id
+        });
+
+        if(!errors.isEmpty()) {
+            res.render('categoryForm', { title: 'Update Category', category: category, errors: errors });
+        }
+        else {
+            async.parallel({
+                categoryList: function(callback) {
+                    Category.find().exec(callback)
+                }
+            }, function(err, results) {
+                if(err) { return next(err) }
+                let duplicate = undefined;
+                const { categoryList } = results;
+                categoryList.forEach( function(categoryFromList) {
+                    if(categoryFromList.name.toUpperCase() === category.name.toUpperCase()) {
+                        duplicate = true;
+                        if(categoryFromList._id.toString() === category._id.toString()) {
+                            duplicate = false;
+                        }
+                    }
+                })
+                if(duplicate) {
+                    res.render('categoryForm', { title: 'Update Category', category: category, errors: [{ msg: 'Category already existed' }] })
+                }
+                else {
+                    Category.findByIdAndUpdate(req.params.id, category, {}, function(err, theCategory) {
+                        if(err) { return next(err) }
+                        res.redirect(theCategory.url);
+                    })
+                }
+            })
+        }
+    }
+];

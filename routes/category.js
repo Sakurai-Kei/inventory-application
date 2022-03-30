@@ -11,4 +11,8 @@ router.post('/create', categoryController.createCategoryPost)
 
 router.get('/:id', categoryController.categoryDetail);
 
+router.get('/:id/update', categoryController.categoryUpdateGet);
+
+router.post('/:id/update', categoryController.categoryUpdatePost);
+
 module.exports = router;
