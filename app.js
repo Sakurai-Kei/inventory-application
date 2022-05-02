@@ -12,7 +12,7 @@ var itemRouter = require('./routes/item');
 
 var app = express();
 
-var mongoDB = process.env.MONGODB_URI || require('./mongodb-connection-string').mongoURI();
+var mongoDB = process.env.MONGODB_URI || require('./mongodb-connection-string');
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB Connection Error:'));
